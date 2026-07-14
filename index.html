@@ -19,7 +19,7 @@
 <div class="sub">A guided executive reflection on CREATE, WIN, and GROW.</div>
 <div class="nav">
 <button class="active" data-view="welcome">Welcome</button>
-<button data-view="saved">Reflections</button>
+<button data-view="saved">Current Reflections</button>
 <button data-view="profile">Company Context</button>
 <button data-view="reflect">Leadership Reflection</button>
 <button data-view="map">Revenue Architecture</button>
@@ -32,6 +32,7 @@
 <div class="actions">
 <button class="btn" id="newBtn">＋ Begin New Reflection</button>
 <button class="btn secondary" id="sampleBtn">Load Sample Reflection</button>
+<button class="btn secondary" id="clearBtn">Clear This Reflection</button>
 </div>
 </aside>
 <main>
@@ -43,6 +44,7 @@
 <h2>What might leadership not be seeing?</h2>
 <p>A guided reflection for CEOs who want to understand how the company creates, wins, and grows revenue—and where the architecture may deserve deeper attention.</p>
 <div class="row"><button class="btn" id="startBtn">Begin Reflection</button><button class="btn secondary" id="sampleBtn2">Explore Sample</button></div>
+<p style="margin-top:16px;font-size:.9rem;color:var(--mint)">Private session: inputs are not saved and are cleared when the page is refreshed or closed.</p>
 </div>
 <div class="section"><h2>What this creates</h2><p>The outcome is not a score. It is a clearer leadership conversation.</p></div>
 <div class="grid cols3">
@@ -52,7 +54,7 @@
 </div>
 </section>
 
-<section id="saved" class="view"><div class="section"><h2>Saved Reflections</h2><p>Stored locally in this browser.</p></div><div id="savedContent"></div></section>
+<section id="saved" class="view"><div class="section"><h2>Current Reflections</h2><p>Session only. Nothing is saved after the page is closed or refreshed.</p></div><div id="savedContent"></div></section>
 
 <section id="profile" class="view">
 <div class="section"><h2>Company Context</h2><p>Begin with the company as leadership currently understands it.</p></div>
@@ -67,7 +69,7 @@
 </div>
 <div class="field"><label>How does leadership describe the growth strategy?</label><textarea id="strategy"></textarea></div>
 <div class="field"><label>What is already on your mind?</label><textarea id="starting"></textarea></div>
-<div class="between"><span></span><button class="btn" id="beginBtn">Begin Leadership Reflection</button></div>
+<div class="between"><button class="btn secondary" id="clearProfileBtn">Clear Inputs</button><button class="btn" id="beginBtn">Begin Leadership Reflection</button></div>
 </div>
 </section>
 
@@ -98,9 +100,9 @@ const TOPICS=[
 ];
 const blank=name=>({id:"r"+Date.now()+Math.random(),company:{name:name||"Untitled Company",industry:"",revenue:"",growth:"",customer:"",salesCycle:"",strategy:"",starting:""},entries:TOPICS.map(()=>({evidence:"",reflection:"",question:""})),createdAt:new Date().toISOString()});
 const sample=()=>{let r=blank("HarborPoint Learning");r.company={name:"HarborPoint Learning",industry:"Education Technology",revenue:"$82M",growth:"15%",customer:"Higher education institutions",salesCycle:"8–12 months",strategy:"Grow enterprise accounts, improve customer expansion, and create greater consistency across regional sales teams.",starting:"The company has strong relationships and credible market standing, but leadership senses that growth still depends too heavily on individual judgment and a few exceptional people."};r.entries=TOPICS.map((t,i)=>({evidence:["Enterprise consolidation remains important, but assumptions are reviewed informally.","Quarterly attention is dominated by forecast and pipeline.","Strong engagement coexists with uneven conversion.","Managers use different standards for qualification.","Successful decisions involve executive sponsorship and consensus.","Late-stage delays repeatedly surprise leadership.","Expansion follows strong adoption and sponsorship.","Top managers identify political risk earlier.","Lessons are discussed but process changes slowly."][i],reflection:["Some foundational beliefs may have become too familiar to receive serious examination.","Leadership attention is concentrated on near-term outcomes more than architecture.","The company may interpret attention as stronger demand than evidence supports.","The company does not always operate from a shared revenue reality.","Important elements of customer decision-making are understood but not embedded.","Early ambiguity may be tolerated until it becomes a forecast problem.","Post-sale growth appears more dependent on judgment than design.","Important knowledge remains concentrated in individuals.","The organization learns conversationally faster than it adapts operationally."][i],question:["What evidence would cause leadership to revise the growth thesis?","What deserves more leadership attention?","What customer action should define meaningful demand?","What common evidence would improve consistency?","How could customer movement become more visible?","Where can leadership become curious earlier?","What conditions should trigger expansion?","How can the organization learn without becoming dependent?","What should change now because leadership knows more?"][i]}));return r};
-let state=JSON.parse(localStorage.getItem("rar-ceo-v1")||'{"items":[],"currentId":null}'),active=0;
-const current=()=>state.items.find(x=>x.id===state.currentId)||null;const save=()=>localStorage.setItem("rar-ceo-v1",JSON.stringify(state));const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));const grow=e=>{e.style.height="auto";e.style.height=Math.max(e.scrollHeight,140)+"px"};
-const titles={welcome:["Welcome","A place to see the company more clearly."],saved:["Reflections","Saved CEO reflections in this browser."],profile:["Company Context","Begin with the company as leadership currently understands it."],reflect:["Leadership Reflection","Evidence first. Reflection second."],map:["Revenue Architecture","A reflection map, not a judgment."],themes:["Leadership Themes","What appears to deserve deeper attention?"],summary:["Executive Reflection","A written view of what leadership is beginning to see."],discussion:["Leadership Discussion Guide","Questions worth continuing with the executive team."],board:["Board Reflection","A board conversation about architecture, not only outcomes."],priorities:["90-Day Priorities","Areas for attention, inquiry, and disciplined action."]};
+let state={items:[],currentId:null},active=0;
+const current=()=>state.items.find(x=>x.id===state.currentId)||null;const save=()=>{};const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));const grow=e=>{e.style.height="auto";e.style.height=Math.max(e.scrollHeight,140)+"px"};
+const titles={welcome:["Welcome","A place to see the company more clearly."],saved:["Current Reflections","Session only. Nothing is stored after the browser session ends."],profile:["Company Context","Begin with the company as leadership currently understands it."],reflect:["Leadership Reflection","Evidence first. Reflection second."],map:["Revenue Architecture","A reflection map, not a judgment."],themes:["Leadership Themes","What appears to deserve deeper attention?"],summary:["Executive Reflection","A written view of what leadership is beginning to see."],discussion:["Leadership Discussion Guide","Questions worth continuing with the executive team."],board:["Board Reflection","A board conversation about architecture, not only outcomes."],priorities:["90-Day Priorities","Areas for attention, inquiry, and disciplined action."]};
 function show(id){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===id));document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===id));title.textContent=titles[id][0];subtitle.textContent=titles[id][1];if(["saved","map","themes","summary","discussion","board","priorities"].includes(id))renderOutputs()}
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>show(b.dataset.view));
 function createNew(){const n=prompt("Company name:");if(n===null)return;const r=blank(n.trim());state.items.push(r);state.currentId=r.id;save();renderAll();show("profile")}
@@ -118,6 +120,22 @@ function renderBoard(){const r=current();if(!r){boardContent.innerHTML='<div cla
 function renderPriorities(){const r=current();if(!r){prioritiesContent.innerHTML='<div class="empty">Create or select a reflection first.</div>';return}prioritiesContent.innerHTML=`<div class="eyebrow">90-Day Leadership Priorities</div><h1>${esc(r.company.name)}</h1><p>Areas for disciplined attention, not automatic prescriptions.</p><div class="grid cols2">${r.entries.filter(x=>x.reflection).slice(0,5).map((x,i)=>`<div class="report-card"><h3>Priority ${i+1}</h3><p>${esc(x.reflection)}</p><p><strong>Continue asking:</strong> ${esc(x.question)}</p></div>`).join("")}</div><h2>Suggested Sequence</h2><ol><li>Observe the pattern without assigning blame.</li><li>Bring the relevant leaders into one shared conversation.</li><li>Clarify what evidence would change confidence.</li><li>Choose one architectural change worth testing.</li><li>Return in 90 days and ask what the system learned.</li></ol>`}
 function renderOutputs(){renderSaved();renderMap();renderThemes();renderSummary();renderDiscussion();renderBoard();renderPriorities()}
 function renderAll(){renderPicker();renderSaved();renderProfile();renderReflection();renderOutputs()}
-newBtn.onclick=createNew;startBtn.onclick=createNew;sampleBtn.onclick=loadSample;sampleBtn2.onclick=loadSample;beginBtn.onclick=()=>{if(!current()){createNew();return}active=0;renderReflection();show("reflect")};renderAll();
+newBtn.onclick=createNew;startBtn.onclick=createNew;sampleBtn.onclick=loadSample;sampleBtn2.onclick=loadSample;
+const clearActiveReflection=()=>{
+  const r=current();
+  if(!r){alert("There is no active reflection to clear.");return}
+  if(confirm("Clear all entries for this reflection? This cannot be undone.")){
+    const fresh=blank(r.company.name||"Untitled Company");
+    fresh.id=r.id;
+    const idx=state.items.findIndex(x=>x.id===r.id);
+    state.items[idx]=fresh;
+    active=0;
+    renderAll();
+    show("profile");
+  }
+};
+clearBtn.onclick=clearActiveReflection;
+clearProfileBtn.onclick=clearActiveReflection;
+beginBtn.onclick=()=>{if(!current()){createNew();return}active=0;renderReflection();show("reflect")};renderAll();
 </script>
 </body></html>
